@@ -148,7 +148,13 @@ const Indicator = GObject.registerClass(
 
         _positionChanged() {
             if (this._settings.get_boolean('enable-positioning')) {
-                this.get_parent().remove_child(this);
+                // this.get_parent().remove_child(this);
+                let parent = this.get_parent();
+
+                if (parent) {
+                    parent.remove_child(this);
+                }
+                
                 let boxes = {
                     0: Main.panel._leftBox,
                     1: Main.panel._centerBox,
@@ -188,7 +194,7 @@ export default class PanelNoteExtension extends Extension {
         this._settings = this.getSettings();
         this._indicator = new Indicator(this._settings, this.uuid);
 
-        Main.panel.addToStatusArea(this.uuid, this._indicator);
+        // Main.panel.addToStatusArea(this.uuid, this._indicator);
 
         this._enablePositioningChangedId = this._settings.connect('changed::enable-positioning', this._indicator._positionChanged.bind(this._indicator));
         this._positionChangedId = this._settings.connect('changed::position', this._indicator._positionChanged.bind(this._indicator));
